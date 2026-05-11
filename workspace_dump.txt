@@ -1,0 +1,125 @@
+================================================================================
+WORKSPACE DUMP
+================================================================================
+
+METADATA
+--------------------------------------------------------------------------------
+
+README:
+# FretGlow Static Project Webpage
+
+This folder contains a plain HTML/CSS/JS project webpage for:
+
+**FretGlow: A DaisyPod-Controlled LED Guitar Fretboard**
+
+The site is designed as a clean, portfolio-style course final project deliverable. It can be opened locally by double-clicking `index.html`; no build step, package install, framework, or local server is required.
+
+## Project Structure
+
+```text
+fretglow-webpage/
+├── index.html
+├── style.css
+├── script.js
+├── README.md
+├── source/
+│   └── fretglow_main.cpp
+└── assets/
+    └── .gitkeep
+```
+
+## How to Run Locally
+
+1. Open this folder in Finder.
+2. Double-click `index.html`.
+3. The page should open directly in your browser.
+
+You can also run a simple local server if you prefer:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit:
+
+```text
+http://localhost:8000
+```
+
+## Adding Your Media
+
+Place your images and video in the `assets/` folder using these filenames:
+
+```text
+assets/hero_system.jpg
+assets/guitar_demo.jpg
+assets/wiring_closeup.jpg
+assets/guitar_pieces.png
+assets/guitar_code.png
+assets/controller_tray.png
+assets/fusion_tray.png
+assets/demo.mp4
+```
+
+The webpage already includes placeholders for each of these files. When a matching image or video exists, `script.js` automatically hides the placeholder and displays the real media.
+
+Recommended media:
+
+- `hero_system.jpg`: best overall photo of the guitar, LEDs, DaisyPod, and controller tray.
+- `guitar_demo.jpg`: clear still image of LEDs on the fretboard.
+- `wiring_closeup.jpg`: breadboard, level shifter, resistor, capacitor, and power wiring.
+- `guitar_pieces.png`: physical build/process photo showing the guitar pieces and LED mounting work.
+- `guitar_code.png`: firmware or serial-log screenshot for the code section.
+- `controller_tray.png`: photo of the red 3D printed tray with DaisyPod and breadboard. A `.jpg` is also fine if you update the image path in `index.html`.
+- `fusion_tray.png`: Fusion 360, CAD, slicer, or Bambu Lab screenshot.
+- `demo.mp4`: final demo video.
+
+The system block diagram is drawn directly in HTML/CSS, so it does not require a separate image file.
+
+## Editing Text
+
+Most of the project copy is already drafted in `index.html`. Search for the HTML comments that begin with:
+
+```html
+<!-- Replace ...
+```
+
+Those comments mark the fastest places to update media, captions, links, and project-specific details.
+
+Update the footer near the bottom of `index.html`:
+
+```html
+Created by <span class="editable-name">Your Name</span>.
+```
+
+Replace `Your Name` with your name and add your course or lab attribution.
+
+## Project Files / Downloads
+
+The "Files / Source" section links to the included firmware file:
+
+```text
+source/fretglow_main.cpp
+```
+
+Replace the remaining `href="#"` values with real files or links before submitting, such as:
+
+- Firmware source code
+- CAD / STL files
+- Wiring diagram
+- Final report PDF
+
+If files are local, put them in `assets/` or a new folder such as `downloads/`, then update the links.
+
+## Submission Tip
+
+Before zipping the folder:
+
+1. Open `index.html` locally.
+2. Check that all image placeholders have been replaced by real media where possible.
+3. Play the demo video.
+4. Test the sticky navigation links.
+5. Confirm your name, course, and year are correct in the footer.
+
+Then zip the whole folder and submit it.
+

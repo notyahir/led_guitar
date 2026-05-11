@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live FretGlow browser fretboard visualizer controlled by DaisyPod USB serial and optional microphone pitch detection.">
+  <title>Live FretGlow Visualizer</title>
+  <link rel="stylesheet" href="visualizer.css">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="title-block">
+      <p class="system-tag">DAISYPOD &middot; WEB SERIAL &middot; AUDIO DETECT</p>
+      <h1>FRETGLOW LIVE</h1>
+      <p>Dial in a key. Pick a scale. Watch the frets glow.</p>
+    </div>
+    <a class="back-link" href="index.html">Back to project page</a>
+  </header>
+
+  <main class="dashboard">
+    <div class="support-warning" id="supportWarning" hidden>
+      Web Serial is unavailable. Use Chrome or Edge from localhost for DaisyPod control.
+    </div>
+
+    <section class="control-strip" aria-label="DaisyPod connection and visualizer state">
+      <div class="status-chip serial-chip">
+        <span><i class="led led-dim" aria-hidden="true"></i>Serial</span>
+        <strong id="connectionStatus">Not connected</strong>
+      </div>
+      <div class="state-chip serial-time-chip">
+        <span><i class="led led-dim" aria-hidden="true"></i>Last serial update</span>
+        <strong id="lastSerialUpdate">Never</strong>
+      </div>
+      <div class="state-chip parse-chip" id="serialParseChip" data-status="waiting">
+        <span><i class="led led-dim" aria-hidden="true"></i>Parser</span>
+        <strong id="serialParseStatus">Waiting</strong>
+      </div>
+      <button class="button button-primary" id="connectButton" type="button">Connect DaisyPod</button>
+      <button class="button button-secondary" id="disconnectButton" type="button" disabled>Disconnect</button>
+
+      <div class="state-chip">
+        <span><i class="led led-gold" aria-hidden="true"></i>Key</span>
+        <strong id="stateKey">A</strong>
+      </div>
+      <div class="state-chip">
+        <span><i class="led led-blue" aria-hidden="true"></i>Scale</span>
+        <strong id="stateScale">Blues</strong>
+      </div>
+      <div class="state-chip">
+        <span><i class="led led-dim" aria-hidden="true"></i>Mode</span>
+        <strong id="stateMode">FullScale</strong>
+      </div>
+      <div class="state-chip enabled-chip">
+        <span><i class="led led-gold" aria-hidden="true"></i>Enabled</span>
+        <strong id="stateEnabled">On</strong>
+      </div>
+      <div class="state-chip source-chip">
+        <span><i class="led led-blue" aria-hidden="true"></i>Source</span>
+        <strong id="stateSource">Manual</strong>
+      </div>
+      <div class="state-chip wide">
+        <span><i class="led led-dim" aria-hidden="true"></i>Last Audio Detection</span>
+        <strong id="stateLastAudioDetection">None</strong>
+      </div>
+    </section>
+
+    <section class="audio-card" id="audioCard" aria-labelledby="audio-title">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow"><i class="led led-dim" id="micLed" aria-hidden="true"></i>Audio Detect</p>
+          <h2 id="audio-title">Voice mode is optional. DaisyPod controls work normally with it off.</h2>
+        </div>
+        <p>With Voice Mode on, SW2 listens for 3 seconds and updates the key. With it off, SW2 just changes display mode.</p>
+      </div>
+
+      <div class="audio-grid">
+        <div class="audio-actions">
+          <button class="button button-secondary" id="voiceModeToggle" type="button" aria-pressed="false">Voice Mode Off</button>
+          <button class="button button-secondary" id="startMicButton" type="button">Start Microphone</button>
+          <button class="button button-primary" id="recordAudioButton" type="button" disabled>Record 3 sec</button>
+          <button class="button button-secondary" id="continuousListenButton" type="button" aria-pressed="false" disabled>Continuous</button>
+          <label>
+            <span>Detection mode</span>
+            <select id="detectionMode">
+              <option value="root">Root only</option>
+              <option value="majorMinor">Root + Major/Minor</option>
+              <option value="pentatonic">Root + Pentatonic candidates</option>
+            </select>
+          </label>
+          <label>
+            <span>Audio input</span>
+            <select id="audioDeviceSelect" disabled>
+              <option value="">Default input</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="audio-status-wrap">
+          <span><i class="led led-dim" aria-hidden="true"></i>Status</span>
+          <p class="audio-status" id="audioStatus">Microphone not started.</p>
+        </div>
+
+        <div class="audio-metrics">
+          <div class="metric">
+            <span><i class="led led-gold" aria-hidden="true"></i>Detected note</span>
+            <strong id="detectedNote">--</strong>
+          </div>
+          <div class="metric">
+            <span>Frequency</span>
+            <strong id="detectedFrequency">-- Hz</strong>
+          </div>
+          <div class="metric">
+            <span>Confidence</span>
+            <strong id="audioConfidence">--</strong>
+          </div>
+          <div class="metric">
+            <span><i class="led led-blue" aria-hidden="true"></i>Source</span>
+            <strong id="audioSourceLabel">Manual</strong>
+          </div>
+          <div class="metric">
+            <span>Top candidate</span>
+            <strong id="topCandidate">--</strong>
+          </div>
+          <div class="metric">
+            <span>Runner-up</span>
+            <strong id="runnerUpCandidate">--</strong>
+          </div>
+          <div class="metric">
+            <span>SW2 trigger</span>
+            <strong id="lastAudioTrigger">0</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fretboard-card" aria-labelledby="fretboard-title">
+      <div class="fretboard-head">
+        <div>
+          <p class="eyebrow">Fretboard</p>
+          <h2 id="fretboard-title">Standard tuning, frets 1-12</h2>
+        </div>
+        <div class="legend" aria-label="Fretboard color legend">
+          <span><i class="legend-dot root-dot"></i>Root</span>
+          <span><i class="legend-dot scale-dot"></i>Scale tone</span>
+          <span><i class="legend-dot gold-dot"></i>Active / detected</span>
+          <span><i class="legend-dot neutral-dot"></i>Off / mapped</span>
+        </div>
+      </div>
+      <div class="fretboard-scroll" tabindex="0" aria-label="Scrollable guitar fretboard">
+        <div class="fretboard" id="fretboard"></div>
+      </div>
+    </section>
+
+    <details class="compact-details">
+      <summary>Manual Override</summary>
+      <div class="manual-grid">
+        <label>
+          <span>Key</span>
+          <select id="manualKey"></select>
+        </label>
+        <label>
+          <span>Scale</span>
+          <select id="manualScale"></select>
+        </label>
+        <label>
+          <span>Mode</span>
+          <select id="manualMode"></select>
+        </label>
+        <label class="brightness-control">
+          <span>Brightness <strong id="manualBrightnessValue">8</strong></span>
+          <input id="manualBrightness" type="range" min="1" max="30" value="8">
+        </label>
+        <label class="toggle-control">
+          <input id="manualEnabled" type="checkbox" checked>
+          <span>Enabled</span>
+        </label>
+        <button class="button button-primary" id="applyManual" type="button">Apply</button>
+      </div>
+    </details>
+
+    <details class="compact-details debug-details">
+      <summary>Debug</summary>
+      <div class="debug-grid">
+        <div>
+          <span>Raw serial log</span>
+          <pre id="lastRaw">No serial input yet.</pre>
+        </div>
+        <div>
+          <span>Last parsed JSON</span>
+          <pre id="lastParsed">{}</pre>
+        </div>
+        <div>
+          <span>Parse error</span>
+          <pre id="parseError">None</pre>
+        </div>
+        <div>
+          <span>Audio pitch frames</span>
+          <pre id="audioFrameSummary">No audio frames yet.</pre>
+        </div>
+        <div>
+          <span>Pitch-class histogram</span>
+          <pre id="histogramDebug">No histogram yet.</pre>
+        </div>
+        <div>
+          <span>Scale candidate scores</span>
+          <pre id="candidateDebug">No candidates yet.</pre>
+        </div>
+      </div>
+      <div class="hidden-line" aria-hidden="true">
+        <code id="lastLine">Waiting for DaisyPod JSON...</code>
+      </div>
+    </details>
+  </main>
+
+  <script src="visualizer.js"></script>
+</body>
+</html>
