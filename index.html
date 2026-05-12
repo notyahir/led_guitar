@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="FretGlow is a DaisyPod-controlled LED guitar fretboard visualizer for musical scales, keys, brightness, and display modes.">
-  <title>FretGlow | DaisyPod-Controlled LED Guitar Fretboard</title>
+  <meta name="description" content="FretGlow is a DaisyPod-controlled guitar fretboard visualizer that began as a physical WS2812B LED guitar prototype and finished as a Web Serial browser recovery demo.">
+  <title>FretGlow | DaisyPod-Controlled Guitar Fretboard Visualizer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,15 +18,15 @@
       </a>
       <div class="nav-links">
         <a href="#demo">Demo</a>
-        <a href="#overview">What It Does</a>
-        <a href="#motivation">Motivation</a>
-        <a href="#architecture">Architecture</a>
+        <a href="#overview">System</a>
+        <a href="#concept">Concept</a>
         <a href="#hardware">Hardware</a>
         <a href="#firmware">Firmware</a>
         <a href="#tray">Tray</a>
         <a href="#debugging">Debugging</a>
-        <a href="#results">Result</a>
-        <a href="#future">Future</a>
+        <a href="#recovery">Visualizer</a>
+        <a href="#audio">Audio</a>
+        <a href="#result">Result</a>
         <a href="#files">Files</a>
       </div>
     </nav>
@@ -34,496 +34,361 @@
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-media media-box media-box-hero">
-        <!-- Replace by adding your real hero photo at assets/hero_system.jpg. The placeholder will hide automatically. -->
-        <img class="media-img media-replaceable" src="assets/hero_system.jpg" alt="FretGlow LED guitar fretboard prototype with DaisyPod controller">
-        <div class="media-placeholder" aria-hidden="true">
-          <span>Hero Image</span>
-          <code>assets/hero_system.jpg</code>
-        </div>
-      </div>
-      <div class="hero-content">
-        <p class="eyebrow">Yahir Hernandez</p>
-        <h1 id="hero-title">FretGlow: A DaisyPod-Controlled LED Guitar Fretboard</h1>
-        <p class="hero-summary">A DIY LED fretboard overlay that uses a DaisyPod to choose key, scale, brightness, and display mode while an LED strip lights up the notes on the guitar neck.</p>
+      <div class="hero-copy">
+        <p class="eyebrow">MIT music technology / embedded systems prototype</p>
+        <h1 id="hero-title">FretGlow</h1>
+        <p class="hero-subtitle">DaisyPod-controlled guitar fretboard visualizer</p>
+        <p class="hero-summary">Dial in a key. Pick a scale. Watch the fretboard map update.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#demo">Watch demo</a>
-          <a class="button button-secondary" href="#architecture">View system design</a>
+          <a class="button button-secondary" href="visualizer.html">Open live visualizer</a>
         </div>
-        <p class="hero-caption">Final guitar, LED strip, DaisyPod, wiring, and red printed tray. Replace with <code>assets/hero_system.jpg</code>.</p>
+        <div class="status-row" aria-label="Project status">
+          <span><i class="led led-gold"></i>DaisyPod controls working</span>
+          <span><i class="led led-blue"></i>Browser visualizer working</span>
+          <span><i class="led led-red"></i>Physical LED chain damaged after mount</span>
+        </div>
       </div>
+
+      <figure class="media-box hero-media">
+        <img class="media-img media-replaceable" src="assets/fretglow_visual.png" alt="FretGlow guitar fretboard visualizer and prototype system">
+        <div class="media-placeholder" aria-hidden="true">
+          <span>Hero Image</span>
+          <code>assets/fretglow_visual.png</code>
+        </div>
+        <figcaption>The final project combines the physical DaisyPod controller with a live digital fretboard display.</figcaption>
+      </figure>
     </section>
 
-    <section class="section section-muted" id="demo" aria-labelledby="demo-title">
+    <section class="section section-tight" id="demo" aria-labelledby="demo-title">
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Demo Video</p>
-            <h2 id="demo-title">The prototype changing musical views in real time</h2>
+            <p class="eyebrow">Demo video</p>
+            <h2 id="demo-title">Final 3-5 minute demo video placeholder</h2>
           </div>
-          <p>The demo shows the LEDs on the fretboard and the DaisyPod controls changing the selected key and scale, and brightness.</p>
+          <p>This is the only remaining missing submission asset. The rest of the project page documents the physical build, the failure point, and the working browser recovery demo.</p>
         </div>
 
         <div class="video-shell">
-          <!-- Add your exported demo video at assets/demo.mp4. Optional poster image: assets/guitar_demo.jpg. -->
-          <video class="demo-video media-video" controls preload="metadata" poster="assets/guitar_demo.jpg">
+          <video class="demo-video media-video" controls preload="metadata">
             <source src="assets/demo.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
           <div class="video-placeholder" aria-hidden="true">
-            <span>Demo Video Placeholder</span>
+            <span>Demo video coming here</span>
             <code>assets/demo.mp4</code>
           </div>
         </div>
-        <p class="caption-note">Video caption: DaisyPod controls drive the fretboard LEDs live. Replace this placeholder with the final demo export at <code>assets/demo.mp4</code>.</p>
-
-        <figure class="media-box demo-still">
-          <!-- Replace by adding your still photo at assets/guitar_demo.jpg. -->
-          <img class="media-img media-replaceable" src="assets/guitar_demo.jpg" alt="FretGlow guitar fretboard demo still">
-          <div class="media-placeholder" aria-hidden="true">
-            <span>Demo Still</span>
-            <code>assets/guitar_demo.jpg</code>
-          </div>
-          <figcaption>Demo still: the guitar fretboard with root notes and scale tones lit in different colors.</figcaption>
-        </figure>
-
-        <article class="visualizer-callout">
-          <div>
-            <p class="eyebrow">Live Browser Visualizer</p>
-            <h3>DaisyPod-controlled fallback demo</h3>
-            <p>After the mounted LED strip became unreliable, the same DaisyPod control mapping was preserved as a browser-based live controller demo. The DaisyPod streams key, scale, mode, brightness, and enabled state over USB serial, and the page renders the matching fretboard map in real time.</p>
-          </div>
-          <a class="button button-primary" href="visualizer.html">Open visualizer</a>
-        </article>
       </div>
     </section>
 
     <section class="section" id="overview" aria-labelledby="overview-title">
-      <div class="container two-column">
+      <div class="container split">
         <div>
-          <p class="eyebrow">What It Does</p>
-          <h2 id="overview-title">A fretboard display that behaves like part of the instrument</h2><br>
-          <p>FretGlow mounts a WS2812B 2.7mm 160 LEDs/m strip along the guitar fretboard and uses the DaisyPod as a hand controller. The project is meant to be readable from the player's point of view: pick a key, pick a scale, and the matching fret positions light up on the guitar.</p>
-          <p>The current prototype is intentionally simple. It focuses on getting the musical mapping, embedded controls, and LED signal chain working together reliably enough as a DIY project but also enough to demo in class.</p>
+          <p class="eyebrow">What it does</p>
+          <h2 id="overview-title">A physical controller driving a live fretboard map</h2>
+          <p>The final reliable demo is a hybrid physical/digital instrument interface: the DaisyPod is the controller, the browser is the fretboard display, and the microphone can update the key from guitar audio.</p>
+          <p>The visualizer renders six strings and twelve frets in standard tuning. Root notes are red, scale tones are electric blue, and all-mapped/debug views use neutral labels. Manual browser controls remain available if Web Serial is not connected.</p>
         </div>
-        <div class="feature-list" aria-label="FretGlow features">
-          <div class="feature-item">
-            <span class="feature-dot root"></span>
-            <p>Shows root notes and other scale tones with different colors so the tonal center stays visible.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-dot key"></span>
-            <p>Maps selected keys and scales onto string and fret positions using chromatic note offsets.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-dot mode"></span>
-            <p>Uses the DaisyPod controls for key, scale, brightness, LED on/off state, and display mode.</p>
-          </div>
-          <div class="feature-item">
-            <span class="feature-dot build"></span>
-            <p>Sends DaisyPod D10 data through an SN74AHCT125N level shifter before the LED strip.</p>
-          </div>
+
+        <div class="control-card">
+          <h3>DaisyPod control map</h3>
+          <dl class="control-table">
+            <div><dt>Pot 1</dt><dd>Key</dd></div>
+            <div><dt>Pot 2</dt><dd>Scale</dd></div>
+            <div><dt>Encoder</dt><dd>Display mode</dd></div>
+            <div><dt>SW1</dt><dd>On / off</dd></div>
+            <div><dt>SW2</dt><dd>Audio detect trigger</dd></div>
+          </dl>
+          <p class="note">The browser visualizer also keeps manual controls for key, scale, mode, brightness, and enabled state.</p>
         </div>
       </div>
     </section>
 
-    <section class="section section-muted" id="motivation" aria-labelledby="motivation-title">
-      <div class="container narrow">
-        <p class="eyebrow">Motivation</p>
-        <h2 id="motivation-title">Making theory visible while playing</h2><br>
-        <p>On guitar, a scale is not just a list of notes. It is a shape spread across strings, frets, hand position, and muscle memory. When practicing a new key, I wanted the information to live on the neck instead of on a chart next to the instrument.</p>
-        <p>The project came from that practical problem: can an embedded controller make the fretboard explain itself while I play? FretGlow is not meant to replace memorization or ear training but instead encourage it! 3</p>   </div>
-    </section>
-
-    <section class="section" id="architecture" aria-labelledby="architecture-title">
+    <section class="section section-muted" id="concept" aria-labelledby="concept-title">
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">System Architecture</p>
-            <h2 id="architecture-title">The signal path from DaisyPod to LEDs</h2>
+            <p class="eyebrow">Original concept</p>
+            <h2 id="concept-title">A non-destructive LED overlay for guitar practice</h2>
           </div>
-          <p>The hardware chain is small but picky. DaisyPod D10 produces the LED data signal, the SN74AHCT125N shifts it from 3.3V to 5V logic, and the WS2812B strip receives one timing-sensitive data stream. The LEDs use a separate 5V supply, but all grounds are tied together.</p>
+          <p>The original idea was to light scale positions directly on the fretboard instead of looking at a chart, phone app, or purpose-built LED guitar. FretGlow tried to make that idea into a retrofit physical prototype.</p>
         </div>
 
-        <div class="diagram-flow" aria-label="System block diagram">
-          <div class="diagram-box">
-            <h3>DaisyPod</h3>
-            <p>Pot 1: Key<br>Pot 2: Scale<br>Encoder: Brightness<br>Button 1: On / Off<br>Button 2: Mode</p>
-          </div>
-
-          <div class="diagram-arrow" aria-hidden="true">↓<span>D10 data</span></div>
-
-          <div class="diagram-box">
-            <h3>SN74AHCT125 Level Shifter</h3>
-            <p>Converts DaisyPod 3.3V logic to 5V LED data.</p>
-          </div>
-
-          <div class="diagram-arrow" aria-hidden="true">↓<span>through 470&Omega; resistor</span></div>
-
-          <div class="diagram-box">
-            <h3>WS2812B LED Strip</h3>
-            <p>5V addressable LED strip, 2.7mm package, 160 LEDs/m.</p>
-          </div>
-
-          <div class="diagram-arrow" aria-hidden="true">↓</div>
-
-          <div class="diagram-box">
-            <h3>Guitar Fretboard Visualization</h3>
-            <p>Root notes and scale tones displayed directly on the instrument.</p>
-          </div>
-
-          <div class="diagram-power">
-            <div class="diagram-box small">
-              <h3>5V Power Supply</h3>
-              <p>Powers LED strip and level shifter.</p>
-            </div>
-            <div class="diagram-box small">
-              <h3>USB Power</h3>
-              <p>Powers DaisyPod.</p>
-            </div>
-            <div class="diagram-box small">
-              <h3>Shared Ground</h3>
-              <p>DaisyPod, level shifter, and LED strip share ground.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="architecture-grid">
-          <article class="spec-card">
-            <h3>Actual wiring notes</h3>
-            <ul class="check-list">
-              <li>DaisyPod D10 connects to SN74AHCT125N pin 2.</li>
-              <li>SN74AHCT125N pin 3 drives the LED data line through a 470&Omega; resistor.</li>
-              <li>LED red wire connects to external +5V power.</li>
-              <li>LED white wire connects to ground.</li>
-              <li>DaisyPod ground, level shifter ground, and LED ground are shared.</li>
-              <li>A 1000&micro;F capacitor sits across the LED power rails.</li>
-            </ul>
-          </article>
-
-          <div class="flow-card" aria-label="Signal flow">
-            <div class="flow-step">
-              <span>1</span>
-              <div>
-                <h3>Control state</h3>
-                <p>The DaisyPod reads the knobs, buttons, and encoder, then updates key, scale, brightness, and display mode in firmware.</p>
-              </div>
-            </div>
-            <div class="flow-step">
-              <span>2</span>
-              <div>
-                <h3>Logic level</h3>
-                <p>D10 data enters the SN74AHCT125N so the LED strip sees a cleaner 5V-compatible signal instead of the DaisyPod's 3.3V output.</p>
-              </div>
-            </div>
-            <div class="flow-step">
-              <span>3</span>
-              <div>
-                <h3>Data protection</h3>
-                <p>A 470&Omega; resistor sits in series with the data line near the LED input to calm the edge going into the first pixel.</p>
-              </div>
-            </div>
-            <div class="flow-step">
-              <span>4</span>
-              <div>
-                <h3>Power</h3>
-                <p>The external 5V supply powers the LEDs, with a 1000&micro;F capacitor across 5V and GND and a shared ground for every board.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-muted" id="hardware" aria-labelledby="hardware-title">
-      <div class="container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Hardware Build</p>
-            <h2 id="hardware-title">A small circuit that had to be wired carefully</h2>
-          </div>
-          <p>The circuit started on a breadboard so I could test quickly, but the LED strip made the weak points obvious. The final wiring worked better after shortening noisy connections, checking rails with a multimeter, and soldering fixes where the breadboard was not stable enough.</p>
-        </div>
-
-        <div class="hardware-grid">
-          <div class="component-panel">
-            <h3>Build notes and parts</h3>
-            <ul class="check-list">
-              <li>DaisyPod embedded controller</li>
-              <li>WS2812B 2.7mm 160 LEDs/m addressable RGB strip</li>
-              <li>SN74AHCT125N level shifter</li>
-              <li>External 5V power supply</li>
-              <li>Breadboard or prototyping board</li>
-              <li>1000&micro;F capacitor across 5V and GND</li>
-              <li>470&Omega; resistor in series with the LED data line</li>
-              <li>Shared ground between DaisyPod, level shifter, and LEDs</li>
-              <li>3D printed controller tray</li>
-            </ul>
-          </div>
-
+        <div class="media-grid two">
           <figure class="media-box">
-            <!-- Replace by adding your wiring closeup photo at assets/wiring_closeup.jpg. -->
-            <img class="media-img media-replaceable" src="assets/wiring_closeup.jpg" alt="Closeup of FretGlow breadboard wiring and level shifter circuit">
-            <div class="media-placeholder" aria-hidden="true">
-              <span>Wiring Closeup</span>
-              <code>assets/wiring_closeup.jpg</code>
-            </div>
-            <figcaption>Wiring closeup: breadboarded SN74AHCT125N level shifter, D10 data path, 470&Omega; data resistor, 1000&micro;F capacitor, and 5V LED power wiring.</figcaption>
+            <img class="media-img media-replaceable" src="assets/fretlight_original_inspo.png" alt="Existing LED guitar inspiration used as a reference for FretGlow">
+            <div class="media-placeholder" aria-hidden="true"><span>Inspiration</span><code>assets/fretlight_original_inspo.png</code></div>
+            <figcaption>Reference point: commercial LED fretboard systems show why direct-on-neck visualization is useful.</figcaption>
+          </figure>
+          <figure class="media-box">
+            <img class="media-img media-replaceable" src="assets/led_lights.png" alt="Narrow WS2812B LED strip used for the FretGlow prototype">
+            <div class="media-placeholder" aria-hidden="true"><span>LED Materials</span><code>assets/led_lights.png</code></div>
+            <figcaption>The physical build used a narrow WS2812B strip so the LEDs could sit close to fret positions.</figcaption>
           </figure>
         </div>
-
-        <figure class="media-box media-contain build-photo">
-          <!-- Build/process photo: replace or crop assets/guitar_pieces.png if you want a tighter view. -->
-          <img class="media-img media-replaceable" src="assets/guitar_pieces.png" alt="Guitar body, fretboard pieces, and LED mounting parts during the FretGlow build">
-          <div class="media-placeholder" aria-hidden="true">
-            <span>Guitar Build Pieces</span>
-            <code>assets/guitar_pieces.png</code>
-          </div>
-          <figcaption>Build process: the guitar body, fretboard pieces, routed LED channel, and hardware layout during integration. This photo makes the project feel like a real physical build rather than only an electronics demo.</figcaption>
-        </figure>
-
-        <div class="note-grid">
-          <article class="note-card">
-            <h3>Data line</h3>
-            <p>DaisyPod D10 carries the WS2812B data signal. It goes into the SN74AHCT125N first, then through a 470&Omega; resistor before reaching the first LED's data input.</p>
-          </article>
-          <article class="note-card">
-            <h3>Power conditioning</h3>
-            <p>The LED strip is powered by an external 5V supply. A 1000&micro;F capacitor sits across 5V and GND to smooth the larger current changes that happen when many LEDs update.</p>
-          </article>
-          <article class="note-card">
-            <h3>Common ground</h3>
-            <p>The DaisyPod, level shifter, LED strip, and external supply all share ground. When this reference was missing or loose, the strip produced unstable colors even when the firmware looked correct.</p>
-          </article>
-        </div>
       </div>
     </section>
 
-    <section class="section" id="firmware" aria-labelledby="firmware-title">
+    <section class="section" id="hardware" aria-labelledby="hardware-title">
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Firmware and Musical Mapping</p>
-            <h2 id="firmware-title">Turning a selected scale into fret positions</h2>
+            <p class="eyebrow">Hardware build</p>
+            <h2 id="hardware-title">The system I actually built</h2>
           </div>
-          <p>The firmware is embedded C++ on the DaisyPod. It keeps a small musical state machine, maps strings and frets to pitch classes, and writes RGB values to the LED strip using WS2812B-compatible data timing.</p>
+          <p>The hardware was a real instrument-scale prototype: DaisyPod controller, level shifter, external 5V LED power, breadboard wiring, a narrow LED strip, and a 3D printed tray to keep the controller assembly together.</p>
+        </div>
+
+        <div class="hardware-layout">
+          <figure class="media-box">
+            <img class="media-img media-replaceable" src="assets/guitar_pieces.png" alt="Guitar pieces and fretboard parts during FretGlow physical build">
+            <div class="media-placeholder" aria-hidden="true"><span>Guitar Build</span><code>assets/guitar_pieces.png</code></div>
+            <figcaption>Physical integration: guitar pieces, fretboard surface, and LED mounting work.</figcaption>
+          </figure>
+
+          <article class="spec-card">
+            <h3>Electronics</h3>
+            <ul class="check-list">
+              <li>DaisyPod embedded controller</li>
+              <li>WS2812B 2.7mm ultra-narrow LED strip, 5V, 160 LEDs/m</li>
+              <li>SN74AHCT125N / 74AHCT125 level shifter</li>
+              <li>470&Omega; resistor in series with LED data</li>
+              <li>Capacitor across 5V and GND near the LED rail</li>
+              <li>External 5V LED power supply</li>
+              <li>Shared ground between DaisyPod, level shifter, and LED strip</li>
+              <li>Breadboard/prototyping wiring during debug</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="diagram-flow" aria-label="FretGlow wiring block diagram">
+          <div class="diagram-box">DaisyPod D10</div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-box">74AHCT125 level shifter</div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-box">470&Omega; resistor</div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-box">WS2812B data in</div>
+          <div class="diagram-rail">
+            <span>5V supply → LED strip + level shifter</span>
+            <span>USB → DaisyPod</span>
+            <span>Shared ground across everything</span>
+          </div>
+        </div>
+
+        <figure class="media-box wide-media">
+          <img class="media-img media-replaceable" src="assets/wiring_closeup.jpg" alt="Closeup of FretGlow breadboard wiring, level shifter, and LED signal path">
+          <div class="media-placeholder" aria-hidden="true"><span>Wiring Closeup</span><code>assets/wiring_closeup.jpg</code></div>
+          <figcaption>Closeup of the breadboarded signal path. The physical wiring ended up mattering as much as the firmware.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="firmware" aria-labelledby="firmware-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Firmware + musical mapping</p>
+            <h2 id="firmware-title">The music mapping was not the hard part. The signal integrity was.</h2>
+          </div>
+          <p>The embedded C++ maps standard tuning to pitch classes, compares each fret against the selected scale template, and chooses colors for roots, scale tones, or all mapped positions.</p>
         </div>
 
         <div class="logic-grid">
           <article>
-            <h3>Control mapping</h3>
-            <p>One DaisyPod knob selects the key, another selects the scale, and the encoder or main knob adjusts brightness. One button toggles the LEDs on and off; another changes display mode.</p>
+            <h3>Open strings</h3>
+            <p>E A D G B E are represented as MIDI 40, 45, 50, 55, 59, and 64.</p>
           </article>
           <article>
-            <h3>Scales and modes</h3>
-            <p>The firmware supports Major, natural minor, major pentatonic, minor pentatonic, blues, Dorian, and Mixolydian. Display modes are full scale, roots only, and all mapped frets test.</p>
+            <h3>Scale templates</h3>
+            <p>Major, Natural Minor, Major Pentatonic, Minor Pentatonic, Blues, Dorian, and Mixolydian.</p>
           </article>
           <article>
-            <h3>Fretboard mapping</h3>
-            <p>Each string starts from its open note in standard tuning. The code maps 6 strings across 54 LEDs per row and uses measured fret-center positions for the first 12 frets.</p>
-          </article>
-          <article>
-            <h3>LED timing</h3>
-            <p>The WS2812B driver sends GRB bytes with direct GPIO writes and a DWT cycle counter. Timing presets made it possible to compare stable cyan-ish and magenta-ish behavior during debugging.</p>
+            <h3>Modes</h3>
+            <p>FullScale, RootsOnly, and AllMapped. These same modes are mirrored in the browser visualizer.</p>
           </article>
           <article>
             <h3>Fault handling</h3>
-            <p>The physical strip has 640 LEDs, but the guitar map uses the first 324. Two calibrated bad pixels, indices 136 and 195, are forced off before every frame.</p>
+            <p>When individual LEDs became unreliable, bad positions were calibrated and disabled in firmware when possible.</p>
           </article>
         </div>
 
-        <div class="code-panel" aria-labelledby="snippet-title">
-          <div class="code-header">
-            <h3 id="snippet-title">Firmware excerpt</h3>
-            <span>Embedded C++ on DaisyPod</span>
+        <div class="code-layout">
+          <div class="code-panel">
+            <div class="code-header">
+              <h3>Pitch-class excerpt</h3>
+              <a href="source/fretglow_main.cpp">source/fretglow_main.cpp</a>
+            </div>
+            <pre><code>const int OPEN_STRINGS[6] = {40, 45, 50, 55, 59, 64};
+int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
           </div>
-          <!-- Short excerpt from source/fretglow_main.cpp. Keep the full source linked in the Files / Source section. -->
-          <pre><code><span class="token comment">// Hardware path: DaisyPod D10 -> SN74AHCT125N -> 470R -> WS2812B DIN.</span>
-<span class="token keyword">static</span> <span class="token keyword">constexpr</span> Pin LED_DATA_PIN = D10;
-<span class="token keyword">const</span> <span class="token type">int</span> BAD_LEDS[] = { <span class="token number">136</span>, <span class="token number">195</span> };
 
-<span class="token comment">// 160 LEDs/m = 6.25mm pitch, based on measured fret centers.</span>
-<span class="token keyword">const</span> <span class="token type">int</span> FRET_LED[FRETS] = {
-  <span class="token number">3</span>, <span class="token number">8</span>, <span class="token number">13</span>, <span class="token number">17</span>, <span class="token number">22</span>, <span class="token number">26</span>,
-  <span class="token number">29</span>, <span class="token number">33</span>, <span class="token number">36</span>, <span class="token number">39</span>, <span class="token number">42</span>, <span class="token number">48</span>
-};
+          <figure class="media-box">
+            <img class="media-img media-replaceable" src="assets/guitar_code.png" alt="FretGlow firmware and serial controller code on screen">
+            <div class="media-placeholder" aria-hidden="true"><span>Firmware</span><code>assets/guitar_code.png</code></div>
+            <figcaption>Embedded C++ on DaisyPod, plus the serial-controller recovery firmware used by the live visualizer.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
 
-<span class="token keyword">static</span> <span class="token type">void</span> draw_scale_map()
-{
-  clear_leds();
-
-  <span class="token keyword">if</span>(!strip_enabled)
-    <span class="token keyword">return</span>;
-
-  <span class="token keyword">for</span>(<span class="token type">int</span> s = <span class="token number">0</span>; s &lt; STRINGS; s++)
-  {
-    <span class="token keyword">for</span>(<span class="token type">int</span> f = <span class="token number">0</span>; f &lt; FRETS; f++)
-    {
-      <span class="token type">int</span> pc = pitch_class_for_position(s, f);
-      <span class="token type">int</span> idx = led_index_for_position(s, f);
-
-      <span class="token keyword">if</span>(mode == <span class="token number">2</span>)
-        set_rgb(idx, brightness, brightness, brightness);
-      <span class="token keyword">else if</span>(pc == current_key)
-        set_rgb(idx, brightness, <span class="token number">0</span>, <span class="token number">0</span>);
-      <span class="token keyword">else if</span>(mode == <span class="token number">0</span> &amp;&amp; in_scale(pc, current_key, current_scale))
-        set_rgb(idx, <span class="token number">0</span>, brightness / <span class="token number">3</span>, brightness);
-    }
-  }
-}</code></pre>
+    <section class="section" id="tray" aria-labelledby="tray-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">3D printed controller tray</p>
+            <h2 id="tray-title">A controller tray made the prototype demoable</h2>
+          </div>
+          <p>The tray was designed in Fusion 360 and printed on a Bambu printer. It holds the DaisyPod and breadboard together so the controller can move as one unit instead of becoming a loose pile of wires.</p>
         </div>
 
-        <figure class="media-box media-contain code-screenshot">
-          <!-- Screenshot from serial/code debugging session. Replace with a tighter crop if needed. -->
-          <img class="media-img media-replaceable" src="assets/guitar_code.png" alt="Terminal screenshot showing FretGlow DaisyPod firmware state logs">
-          <div class="media-placeholder" aria-hidden="true">
-            <span>Firmware / Serial Log Screenshot</span>
-            <code>assets/guitar_code.png</code>
+        <div class="media-grid two">
+          <figure class="media-box">
+            <img class="media-img media-replaceable" src="assets/controller_tray.png" alt="Red 3D printed tray holding DaisyPod and breadboard">
+            <div class="media-placeholder" aria-hidden="true"><span>Controller Tray</span><code>assets/controller_tray.png</code></div>
+            <figcaption>Open-top tray: useful for probing, rewiring, and keeping the DaisyPod plus breadboard physically connected.</figcaption>
+          </figure>
+          <figure class="media-box">
+            <img class="media-img media-replaceable" src="assets/fusion_tray.png" alt="Fusion 360 model or slicer view of the FretGlow controller tray">
+            <div class="media-placeholder" aria-hidden="true"><span>CAD</span><code>assets/fusion_tray.png</code></div>
+            <figcaption>Fusion/CAD view for the controller tray. A later revision could add a cover and stronger cable strain relief.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="debugging" aria-labelledby="debugging-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Debugging the LED signal</p>
+            <h2 id="debugging-title">The physical signal path was the hard part</h2>
           </div>
-          <figcaption>Firmware evidence: USB serial logging prints key, scale, mode, brightness, timing preset, and the disabled LED indices while the DaisyPod controls are being tested.</figcaption>
+          <p>The WS2812B data chain worked during testing, but it became unreliable after mounting on the neckboard. Power still reached the strip, but data did not reliably pass down the chain around an early LED / data break.</p>
+        </div>
+
+        <div class="debug-grid">
+          <article class="debug-card">
+            <h3>Timing-sensitive LEDs</h3>
+            <p>WS2812B LEDs interpret one strict serial data stream. Loose wiring or weak edges caused flickering, random colors, and unstable strip behavior.</p>
+          </article>
+          <article class="debug-card">
+            <h3>Measured the signal path</h3>
+            <p>I verified DaisyPod D10, the level-shifter output, 5V rail, and shared ground with a multimeter while isolating firmware versus wiring issues.</p>
+          </article>
+          <article class="debug-card">
+            <h3>Reworked connections</h3>
+            <p>Noisy jumper wires were replaced or reinforced with soldered connections. Some individual bad LEDs were masked in firmware when needed.</p>
+          </article>
+          <article class="debug-card fault">
+            <h3>Mounting failure</h3>
+            <p>The physical LEDs worked until the neckboard mount damaged the data chain. That failure became the turning point for the browser recovery demo.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="recovery" aria-labelledby="recovery-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Browser visualizer recovery</p>
+            <h2 id="recovery-title">The fallback kept the real controller and moved the fretboard display into the browser</h2>
+          </div>
+          <p>The visualizer is not just a mockup. It is controlled by the same DaisyPod hardware and uses the same pitch-class mapping logic as the embedded LED system.</p>
+        </div>
+
+        <div class="recovery-layout">
+          <figure class="media-box">
+            <img class="media-img media-replaceable" src="assets/fretglow_digital.png" alt="Browser-based FretGlow live fretboard visualizer">
+            <div class="media-placeholder" aria-hidden="true"><span>Digital Visualizer</span><code>assets/fretglow_digital.png</code></div>
+            <figcaption>The final reliable display path: a Web Serial browser fretboard controlled by DaisyPod.</figcaption>
+          </figure>
+
+          <article class="recovery-card">
+            <h3>What changed</h3>
+            <ul class="check-list">
+              <li>DaisyPod streams compact JSON state over USB serial.</li>
+              <li>The browser reads the stream with the Web Serial API.</li>
+              <li>The fretboard renders live with plain HTML/CSS/JS.</li>
+              <li>The same pitch-class mapping drives the displayed note positions.</li>
+              <li>Manual controls remain available for fallback demos.</li>
+            </ul>
+            <a class="button button-primary" href="visualizer.html">Open live visualizer</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="audio" aria-labelledby="audio-title">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">Audio / microphone detection</p>
+          <h2 id="audio-title">Pitch-class/root estimation, not chord recognition</h2>
+          <p>The browser can use microphone input to estimate a stable pitch class from guitar audio and update the visualizer key. It works best when I play a single note or strongly emphasize the root.</p>
+          <p>Root-only detection is the reliable mode. Major/minor/pentatonic inference needs multiple confident pitch classes and should be treated as a lightweight guess, not a full theory engine.</p>
+        </div>
+
+        <div class="signal-card">
+          <h3>Audio path</h3>
+          <ol>
+            <li>Start microphone in Chrome or Edge.</li>
+            <li>Record a short detection window.</li>
+            <li>Estimate frequency with browser audio buffers.</li>
+            <li>Convert frequency to MIDI, then pitch class.</li>
+            <li>Update the visualizer key if the result is stable.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="result" aria-labelledby="result-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Final result</p>
+            <h2 id="result-title">A working hybrid physical/digital instrument interface</h2>
+          </div>
+          <p>The physical LED prototype was built and partially working. The DaisyPod controller, musical mapping, digital visualizer, and microphone pitch/root detection are working. The browser visualizer became the final reliable demo path after the LED strip was damaged.</p>
+        </div>
+
+        <div class="result-grid">
+          <article class="result-card good">
+            <h3>Working now</h3>
+            <ul>
+              <li>DaisyPod controls browser visualizer over USB serial.</li>
+              <li>Key, scale, mode, and enabled state update the fretboard map.</li>
+              <li>Microphone pitch/root detection updates the key.</li>
+              <li>Controller tray and electronics are built and documented.</li>
+            </ul>
+          </article>
+          <article class="result-card caution">
+            <h3>Documented limitation</h3>
+            <p>The physical LED strip/data chain is not the final reliable display path after the mounting damage. The hardware effort is still central to the project because it drove the controller design, wiring, firmware, and recovery path.</p>
+          </article>
+        </div>
+
+        <figure class="media-box wide-media">
+          <img class="media-img media-replaceable" src="assets/fretglow_visual.png" alt="Final FretGlow project visual with guitar and interface elements">
+          <div class="media-placeholder" aria-hidden="true"><span>Final Visual</span><code>assets/fretglow_visual.png</code></div>
+          <figcaption>Final reliable demo: physical DaisyPod controller, digital fretboard display, and optional audio key detection.</figcaption>
         </figure>
       </div>
     </section>
 
-    <section class="section section-muted" id="tray" aria-labelledby="tray-title">
+    <section class="section section-muted" id="future" aria-labelledby="future-title">
       <div class="container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">3D Printed Controller Tray</p>
-            <h2 id="tray-title">A red tray that made the prototype easier to handle</h2>
-          </div>
-          <p>The tray holds the breadboard on top and the DaisyPod below so the controller does not become a loose pile of wires during testing. It also made it easier to bring the project to a desk, guitar stand, or demo setup without rebuilding the electronics every time.</p>
-        </div>
-
-        <div class="media-grid">
-          <figure class="media-box">
-            <!-- Replace by adding your controller tray photo at assets/controller_tray.png or assets/controller_tray.jpg. -->
-            <img class="media-img media-replaceable" src="assets/controller_tray.png" alt="Red 3D printed tray holding DaisyPod and breadboard">
-            <div class="media-placeholder" aria-hidden="true">
-              <span>Controller Tray Photo</span>
-              <code>assets/controller_tray.png</code>
-            </div>
-            <figcaption>Controller tray: breadboard on the top level, DaisyPod below, with room to route jumper wires between them.</figcaption>
-          </figure>
-
-          <figure class="media-box">
-            <!-- Replace by adding your CAD or slicer screenshot at assets/fusion_tray.png. -->
-            <img class="media-img media-replaceable" src="assets/fusion_tray.png" alt="Fusion CAD or Bambu slicer screenshot of the controller tray">
-            <div class="media-placeholder" aria-hidden="true">
-              <span>Fusion / Bambu Screenshot</span>
-              <code>assets/fusion_tray.png</code>
-            </div>
-            <figcaption>CAD / slicer view: tray modeled in a Fusion-style CAD workflow and printed on a Bambu Lab X1 Carbon.</figcaption>
-          </figure>
-        </div>
-
-        <div class="tray-copy">
-          <p>The tray was designed around the exact prototype layout rather than an off-the-shelf enclosure. The open top was useful because the level shifter circuit still needed probing, rewiring, and soldered fixes late in the process.</p>
-          <p>A top cover would make the controller look more finished, but leaving it open made sense for this version because the project was still an engineering build, not a sealed product.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="debugging" aria-labelledby="debugging-title">
-      <div class="container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Debugging the LED Signal</p>
-            <h2 id="debugging-title">Most of the trouble was electrical, not musical</h2>
-          </div>
-          <p>The first versions did not fail politely. The LEDs flickered, showed colors I did not ask for, or stopped updating after a physical bump. That pushed the project into a debugging loop of measuring, rewiring, shortening leads, and isolating whether the problem was firmware, power, level shifting, or a bad LED.</p>
-        </div>
-
-        <div class="debug-timeline">
-          <article class="challenge-card">
-            <h3>Unstable WS2812B data</h3>
-            <p>The WS2812B strip was sensitive to the exact data signal arriving at the first LED. When the D10 signal was weak, long, or noisy, the strip interpreted the timing incorrectly and produced flicker or wrong colors.</p>
-          </article>
-          <article class="challenge-card">
-            <h3>Noisy jumper wires</h3>
-            <p>Some jumper connections looked fine until the guitar or tray moved. The breadboard made iteration fast, but it also introduced intermittent contact problems that were hard to distinguish from code bugs at first.</p>
-          </article>
-          <article class="challenge-card">
-            <h3>Multimeter checks</h3>
-            <p>I used a multimeter to confirm 5V power, continuity, ground connections, and whether the SN74AHCT125N was actually receiving the expected supply and input wiring.</p>
-          </article>
-          <article class="challenge-card">
-            <h3>Soldered fixes</h3>
-            <p>Cleaner physical connections helped more than cosmetic cleanup. Rewiring and soldering weak spots made the LED behavior noticeably more repeatable than the early all-jumper setup.</p>
-          </article>
-          <article class="challenge-card">
-            <h3>Tiny LED pads</h3>
-            <p>The 2.7mm LEDs made repair work delicate. Too much heat or mechanical stress could damage a pixel or pad, so soldering fixes had to be small, quick, and carefully supported.</p>
-          </article>
-          <article class="challenge-card">
-            <h3>Faulty pixels</h3>
-            <p>Two LEDs were unreliable enough that I disabled them in software. That was not the ideal fix, but it let the rest of the fretboard continue working for the final prototype.</p>
-          </article>
-        </div>
-
-        <div class="debug-summary">
-          <h3>Takeaway</h3>
-          <p>The most useful debugging shift was treating the LED strip as an electrical signal-integrity problem instead of only a firmware problem. Once the level shifter, data resistor, capacitor, shared ground, and physical wiring were cleaned up, the same musical code became much easier to trust.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-muted" id="results" aria-labelledby="results-title">
-      <div class="container">
-        <div>
-          <p class="eyebrow">Final Result</p>
-          <h2 id="results-title">A working prototype with clear next steps</h2>
-          <p class="results-intro">By the end, FretGlow could display selected scales on the guitar neck, distinguish roots from other scale tones, and respond to DaisyPod input without reflashing. The build still has the feel of a student prototype, but it demonstrates the core interaction: changing a musical choice on the controller changes the instrument display immediately.</p>
-        </div>
-
-        <div class="worked-grid" aria-label="What worked and what I would improve">
-          <article class="takeaway-card">
-            <h3>What worked</h3>
-            <ul>
-              <li>DaisyPod control of key, scale, brightness, and mode.</li>
-              <li>Root notes and scale tones shown in different colors.</li>
-              <li>Stable enough LED output after level shifting and cleaner wiring.</li>
-              <li>3D printed tray holding the breadboard and DaisyPod as one unit.</li>
-            </ul>
-          </article>
-          <article class="takeaway-card">
-            <h3>What I would improve</h3>
-            <ul>
-              <li>Replace the breadboard with a custom PCB.</li>
-              <li>Use a more robust connector and strain relief for the LED strip.</li>
-              <li>Make the fretboard mounting cleaner and easier to remove.</li>
-              <li>Remove the need for software-disabled pixels by replacing damaged LED sections.</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="future" aria-labelledby="future-title">
-      <div class="container">
-        <p class="eyebrow">Future Work</p>
-        <h2 id="future-title">Next revisions</h2>
+        <p class="eyebrow">Future work</p>
+        <h2 id="future-title">What I would build next</h2>
         <div class="future-grid">
-          <article>
-            <h3>Custom PCB</h3>
-            <p>Replace the breadboard with a compact PCB for cleaner wiring, stronger connections, and easier assembly.</p>
-          </article>
-          <article>
-            <h3>Better enclosure</h3>
-            <p>Add a top cover, strain relief, mounting points, and a more polished controller form factor.</p>
-          </article>
-          <article>
-            <h3>Chord and arpeggio modes</h3>
-            <p>Extend the firmware beyond scales to display chords, arpeggios, intervals, and practice patterns.</p>
-          </article>
-          <article>
-            <h3>Improved fretboard mounting</h3>
-            <p>Design a cleaner LED mounting method that is stable, removable, and easier to align with frets.</p>
-          </article>
-          <article>
-            <h3>MIDI and audio integration</h3>
-            <p>Connect the display to MIDI, audio analysis, or external software so the fretboard can respond to songs, loops, or live input.</p>
-          </article>
+          <article><h3>Rebuild LED strip</h3><p>Add stronger strain relief and replace the damaged data-chain section.</p></article>
+          <article><h3>Custom board</h3><p>Move the level shifter, resistor, capacitor, and connectors off the breadboard.</p></article>
+          <article><h3>Locking connectors</h3><p>Use JST or locking connectors for power and data instead of loose jumpers.</p></article>
+          <article><h3>Better neck mount</h3><p>Make a cleaner non-destructive fretboard mount with less stress on tiny LED pads.</p></article>
+          <article><h3>MIDI input</h3><p>Let external software or a MIDI controller choose keys, scales, and practice modes.</p></article>
+          <article><h3>Audio improvements</h3><p>Improve pitch tracking and add chord, arpeggio, and phrase visualization.</p></article>
         </div>
       </div>
     </section>
@@ -532,29 +397,19 @@
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Files / Source</p>
-            <h2 id="files-title">Submission materials</h2>
+            <p class="eyebrow">Files / source</p>
+            <h2 id="files-title">Submission links</h2>
           </div>
-          <p>The firmware source is included directly. Replace the remaining placeholder links with final CAD files, wiring notes, and documentation before submitting.</p>
+          <p>These links point to real files in the static project folder. The final demo video slot is the only intentional placeholder.</p>
         </div>
 
         <div class="download-grid">
-          <a class="download-card" href="source/fretglow_main.cpp" aria-label="FretGlow source code link">
-            <span>Source Code</span>
-            <code>source/fretglow_main.cpp</code>
-          </a>
-          <a class="download-card" href="#" aria-label="CAD files placeholder link">
-            <span>CAD Files</span>
-            <code>link-to-controller-tray.stl</code>
-          </a>
-          <a class="download-card" href="#architecture" aria-label="Jump to system block diagram section">
-            <span>System Diagram</span>
-            <code>#architecture</code>
-          </a>
-          <a class="download-card" href="#" aria-label="Final report placeholder link">
-            <span>Final Notes</span>
-            <code>link-to-report.pdf</code>
-          </a>
+          <a class="download-card" href="source/fretglow_main.cpp"><span>Physical LED firmware</span><code>source/fretglow_main.cpp</code></a>
+          <a class="download-card" href="source/fretglow_serial_controller.cpp"><span>Browser serial firmware</span><code>source/fretglow_serial_controller.cpp</code></a>
+          <a class="download-card" href="visualizer.html"><span>Live visualizer</span><code>visualizer.html</code></a>
+          <a class="download-card" href="README.md"><span>Run instructions</span><code>README.md</code></a>
+          <a class="download-card" href="assets/fusion_tray.png"><span>CAD / tray evidence</span><code>assets/fusion_tray.png</code></a>
+          <a class="download-card missing" href="#demo"><span>Demo video placeholder</span><code>assets/demo.mp4</code></a>
         </div>
       </div>
     </section>
@@ -562,8 +417,8 @@
 
   <footer class="footer">
     <div class="container footer-content">
-      <p><strong>FretGlow</strong> | Course final project | 2026</p>
-      <p>Created by <span class="editable-name">Your Name</span>. Replace this footer with your class, lab, or project attribution.</p>
+      <p><strong>FretGlow</strong> | DaisyPod-controlled guitar fretboard visualizer</p>
+      <p>Final project page. Demo video pending.</p>
     </div>
   </footer>
 
