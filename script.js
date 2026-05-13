@@ -36,6 +36,41 @@ const sections = navLinks
   .map((link) => document.querySelector(link.getAttribute("href")))
   .filter(Boolean);
 
+function setActiveNav(hash) {
+  navLinks.forEach((link) => {
+    link.classList.toggle("is-active", link.getAttribute("href") === hash);
+  });
+}
+
+function setActiveNavFromScroll() {
+  if (sections.length === 0) {
+    return;
+  }
+
+  const anchorLine = window.scrollY + Math.max(120, window.innerHeight * 0.28);
+  let current = sections[0];
+
+  sections.forEach((section) => {
+    if (section.offsetTop <= anchorLine) {
+      current = section;
+    }
+  });
+
+  setActiveNav(`#${current.id}`);
+}
+
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    setActiveNav(link.getAttribute("href"));
+  });
+});
+
+window.addEventListener("hashchange", () => {
+  if (window.location.hash) {
+    setActiveNav(window.location.hash);
+  }
+});
+
 if ("IntersectionObserver" in window && sections.length > 0) {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -60,3 +95,6 @@ if ("IntersectionObserver" in window && sections.length > 0) {
 
   sections.forEach((section) => observer.observe(section));
 }
+
+window.addEventListener("scroll", setActiveNavFromScroll, { passive: true });
+setActiveNavFromScroll();

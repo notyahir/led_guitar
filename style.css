@@ -38,7 +38,7 @@ body {
   color: var(--text);
   font-family: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 16px;
-  line-height: 1.62;
+  line-height: 1.58;
 }
 
 body::before {
@@ -75,7 +75,7 @@ dd {
 }
 
 p + p {
-  margin-top: 0.85rem;
+  margin-top: 0.72rem;
 }
 
 h1,
@@ -83,21 +83,23 @@ h2,
 h3 {
   line-height: 1.05;
   letter-spacing: 0;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(4.5rem, 12vw, 10rem);
+  font-size: clamp(4rem, 9vw, 7.6rem);
   font-weight: 800;
   text-transform: uppercase;
 }
 
 h2 {
-  font-size: clamp(2rem, 5vw, 4rem);
+  max-width: 920px;
+  font-size: clamp(1.9rem, 3.8vw, 3.35rem);
   font-weight: 800;
 }
 
 h3 {
-  font-size: 1.08rem;
+  font-size: 1.02rem;
   font-weight: 750;
 }
 
@@ -241,13 +243,14 @@ figcaption {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(380px, 0.72fr);
   gap: clamp(1rem, 4vw, 3rem);
-  align-items: end;
-  min-height: calc(100vh - 58px);
-  padding: clamp(3rem, 8vh, 6rem) 0 1.2rem;
+  align-items: center;
+  min-height: min(800px, calc(100vh - 58px));
+  padding: clamp(2.5rem, 7vh, 5rem) 0 1.2rem;
 }
 
 .hero-copy {
-  padding-bottom: 1rem;
+  min-width: 0;
+  padding-bottom: 0;
 }
 
 .eyebrow {
@@ -260,16 +263,18 @@ figcaption {
 }
 
 .hero-subtitle {
+  max-width: 720px;
   color: var(--text);
-  font-size: clamp(1.35rem, 3vw, 2.4rem);
+  font-size: clamp(1.32rem, 2.6vw, 2.12rem);
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .hero-summary {
   max-width: 680px;
-  margin-top: 0.75rem;
+  margin-top: 0.85rem;
   color: var(--muted);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-size: clamp(1rem, 1.45vw, 1.2rem);
 }
 
 .hero-actions {
@@ -339,11 +344,39 @@ figcaption {
 
 .hero-media {
   align-self: stretch;
-  min-height: 460px;
+  min-height: 430px;
+}
+
+.hero-media-led {
+  position: relative;
+  min-height: 430px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 196, 61, 0.1), transparent 24rem),
+    linear-gradient(180deg, rgba(29, 35, 53, 0.72), rgba(12, 14, 23, 0.92));
+}
+
+.hero-rotated-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-media-led .media-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(560px, 52vw, 720px);
+  height: clamp(500px, 42vw, 650px);
+  max-width: none;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
+  transform: translate(-50%, -50%) rotate(90deg);
+  filter: saturate(1.06) contrast(1.02);
 }
 
 .section {
-  padding: clamp(3.2rem, 7vw, 6rem) 0;
+  padding: clamp(2.8rem, 6vw, 5.2rem) 0;
 }
 
 .section-tight {
@@ -359,10 +392,10 @@ figcaption {
 
 .section-heading {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.72fr);
-  gap: clamp(1rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 0.92fr) minmax(280px, 0.7fr);
+  gap: clamp(1rem, 3.2vw, 2.4rem);
   align-items: end;
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.15rem;
 }
 
 .section-heading > p,
@@ -374,6 +407,20 @@ figcaption {
   color: var(--muted);
 }
 
+.split > div > p.eyebrow {
+  color: var(--gold);
+}
+
+.section-heading > p,
+.split > div > p {
+  max-width: 680px;
+  font-size: 1rem;
+}
+
+.split > div > p.eyebrow {
+  font-size: 0.72rem;
+}
+
 .split,
 .hardware-layout,
 .code-layout,
@@ -381,7 +428,7 @@ figcaption {
 .result-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
-  gap: 1rem;
+  gap: 1.1rem;
   align-items: start;
 }
 
@@ -404,7 +451,7 @@ figcaption {
 .download-card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(32, 38, 58, 0.72), rgba(14, 16, 26, 0.9));
+  background: linear-gradient(180deg, rgba(29, 35, 53, 0.72), rgba(12, 14, 23, 0.92));
 }
 
 .media-box {
@@ -505,7 +552,7 @@ figcaption {
 .signal-card,
 .result-card,
 .future-grid article {
-  padding: 1rem;
+  padding: 1.05rem;
 }
 
 .control-card h3,
@@ -515,7 +562,7 @@ figcaption {
 .signal-card h3,
 .result-card h3,
 .future-grid h3 {
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.58rem;
   color: var(--text);
 }
 
@@ -529,7 +576,7 @@ figcaption {
   grid-template-columns: 5.2rem minmax(0, 1fr);
   gap: 0.5rem;
   align-items: center;
-  padding: 0.45rem 0.55rem;
+  padding: 0.5rem 0.58rem;
   border: 1px solid var(--border);
   border-radius: 5px;
   background: rgba(8, 9, 16, 0.45);
@@ -555,6 +602,7 @@ figcaption {
 
 .check-list {
   color: #d8dcfa;
+  line-height: 1.5;
 }
 
 .diagram-flow {
@@ -601,20 +649,20 @@ figcaption {
 
 .logic-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .logic-grid article {
-  padding: 0.85rem;
+  padding: 0.95rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: rgba(21, 25, 39, 0.6);
 }
 
 .logic-grid p {
-  margin-top: 0.45rem;
+  margin-top: 0.5rem;
   color: var(--muted);
-  font-size: 0.94rem;
+  font-size: 0.92rem;
 }
 
 .code-panel {
@@ -659,12 +707,13 @@ pre {
 }
 
 .debug-card {
-  padding: 1rem;
+  padding: 1.05rem;
 }
 
 .debug-card p {
-  margin-top: 0.55rem;
+  margin-top: 0.52rem;
   color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .debug-card.fault {
@@ -697,7 +746,9 @@ pre {
 }
 
 .future-grid p {
+  margin-top: 0.45rem;
   color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .download-grid {
@@ -791,7 +842,11 @@ pre {
   }
 
   h1 {
-    font-size: clamp(3.5rem, 18vw, 6rem);
+    font-size: clamp(3rem, 15vw, 4.15rem);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.25rem, 7vw, 1.8rem);
   }
 
   .hero,

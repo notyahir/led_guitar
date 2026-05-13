@@ -18,7 +18,6 @@
       </a>
       <div class="nav-links">
         <a href="#demo">Demo</a>
-        <a href="#overview">System</a>
         <a href="#concept">Concept</a>
         <a href="#hardware">Hardware</a>
         <a href="#firmware">Firmware</a>
@@ -35,9 +34,9 @@
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">MIT music technology / embedded systems prototype</p>
+        <p class="eyebrow">Final Project by Yahir Hernandez</p>
         <h1 id="hero-title">FretGlow</h1>
-        <p class="hero-subtitle">DaisyPod-controlled guitar fretboard visualizer</p>
+        <p class="hero-subtitle">DaisyPod-controlled fretboard visualizer</p>
         <p class="hero-summary">Dial in a key. Pick a scale. Watch the fretboard map update.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#demo">Watch demo</a>
@@ -50,13 +49,15 @@
         </div>
       </div>
 
-      <figure class="media-box hero-media">
-        <img class="media-img media-replaceable" src="assets/fretglow_visual.png" alt="FretGlow guitar fretboard visualizer and prototype system">
+      <figure class="media-box hero-media hero-media-led">
+        <div class="hero-rotated-image">
+          <img class="media-img media-replaceable" src="assets/led_lights.png" alt="Narrow WS2812B LED strip used for the FretGlow fretboard prototype">
+        </div>
         <div class="media-placeholder" aria-hidden="true">
           <span>Hero Image</span>
-          <code>assets/fretglow_visual.png</code>
+          <code>assets/led_lights.png</code>
         </div>
-        <figcaption>The final project combines the physical DaisyPod controller with a live digital fretboard display.</figcaption>
+        <figcaption>The original physical display used a narrow WS2812B strip mounted along the fretboard path.</figcaption>
       </figure>
     </section>
 
@@ -65,9 +66,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">Demo video</p>
-            <h2 id="demo-title">Final 3-5 minute demo video placeholder</h2>
+            <h2 id="demo-title">Final project demo video</h2>
           </div>
-          <p>This is the only remaining missing submission asset. The rest of the project page documents the physical build, the failure point, and the working browser recovery demo.</p>
+          <p>The demo shows the physical DaisyPod controller, the browser fretboard visualizer, the LED-strip failure path, and the working recovery system.</p>
         </div>
 
         <div class="video-shell">
@@ -76,7 +77,7 @@
             Your browser does not support the video tag.
           </video>
           <div class="video-placeholder" aria-hidden="true">
-            <span>Demo video coming here</span>
+            <span>Demo video loading</span>
             <code>assets/demo.mp4</code>
           </div>
         </div>
@@ -87,7 +88,7 @@
       <div class="container split">
         <div>
           <p class="eyebrow">What it does</p>
-          <h2 id="overview-title">A physical controller driving a live fretboard map</h2>
+          <h2 id="overview-title">Physical controller driving a live fretboard map</h2><br>
           <p>The final reliable demo is a hybrid physical/digital instrument interface: the DaisyPod is the controller, the browser is the fretboard display, and the microphone can update the key from guitar audio.</p>
           <p>The visualizer renders six strings and twelve frets in standard tuning. Root notes are red, scale tones are electric blue, and all-mapped/debug views use neutral labels. Manual browser controls remain available if Web Serial is not connected.</p>
         </div>
@@ -97,9 +98,9 @@
           <dl class="control-table">
             <div><dt>Pot 1</dt><dd>Key</dd></div>
             <div><dt>Pot 2</dt><dd>Scale</dd></div>
-            <div><dt>Encoder</dt><dd>Display mode</dd></div>
+            <div><dt>Encoder</dt><dd>Brightness</dd></div>
             <div><dt>SW1</dt><dd>On / off</dd></div>
-            <div><dt>SW2</dt><dd>Audio detect trigger</dd></div>
+            <div><dt>SW2</dt><dd>Mode / Voice Mode trigger</dd></div>
           </dl>
           <p class="note">The browser visualizer also keeps manual controls for key, scale, mode, brightness, and enabled state.</p>
         </div>
@@ -135,7 +136,7 @@
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Hardware build</p>
+            <p class="eyebrow">Hardware</p>
             <h2 id="hardware-title">The system I actually built</h2>
           </div>
           <p>The hardware was a real instrument-scale prototype: DaisyPod controller, level shifter, external 5V LED power, breadboard wiring, a narrow LED strip, and a 3D printed tray to keep the controller assembly together.</p>
@@ -190,7 +191,7 @@
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Firmware + musical mapping</p>
+            <p class="eyebrow">Firmware / musical mapping</p>
             <h2 id="firmware-title">The music mapping was not the hard part. The signal integrity was.</h2>
           </div>
           <p>The embedded C++ maps standard tuning to pitch classes, compares each fret against the selected scale template, and chooses colors for roots, scale tones, or all mapped positions.</p>
@@ -238,8 +239,8 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">3D printed controller tray</p>
-            <h2 id="tray-title">A controller tray made the prototype demoable</h2>
+            <p class="eyebrow">Tray</p>
+            <h2 id="tray-title">3D printed controller tray made prototype demoable</h2>
           </div>
           <p>The tray was designed in Fusion 360 and printed on a Bambu printer. It holds the DaisyPod and breadboard together so the controller can move as one unit instead of becoming a loose pile of wires.</p>
         </div>
@@ -263,8 +264,8 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Debugging the LED signal</p>
-            <h2 id="debugging-title">The physical signal path was the hard part</h2>
+            <p class="eyebrow">Debugging</p>
+            <h2 id="debugging-title">The physical signal path was the hard part</h2><br>
           </div>
           <p>The WS2812B data chain worked during testing, but it became unreliable after mounting on the neckboard. Power still reached the strip, but data did not reliably pass down the chain around an early LED / data break.</p>
         </div>
@@ -294,7 +295,7 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Browser visualizer recovery</p>
+            <p class="eyebrow">Visualizer</p>
             <h2 id="recovery-title">The fallback kept the real controller and moved the fretboard display into the browser</h2>
           </div>
           <p>The visualizer is not just a mockup. It is controlled by the same DaisyPod hardware and uses the same pitch-class mapping logic as the embedded LED system.</p>
@@ -326,7 +327,7 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
       <div class="container split">
         <div>
           <p class="eyebrow">Audio / microphone detection</p>
-          <h2 id="audio-title">Pitch-class/root estimation, not chord recognition</h2>
+          <h2 id="audio-title">Pitch-class/root estimation, not chord recognition</h2><br>
           <p>The browser can use microphone input to estimate a stable pitch class from guitar audio and update the visualizer key. It works best when I play a single note or strongly emphasize the root.</p>
           <p>Root-only detection is the reliable mode. Major/minor/pentatonic inference needs multiple confident pitch classes and should be treated as a lightweight guess, not a full theory engine.</p>
         </div>
@@ -348,7 +349,7 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
       <div class="container">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Final result</p>
+            <p class="eyebrow">Result</p>
             <h2 id="result-title">A working hybrid physical/digital instrument interface</h2>
           </div>
           <p>The physical LED prototype was built and partially working. The DaisyPod controller, musical mapping, digital visualizer, and microphone pitch/root detection are working. The browser visualizer became the final reliable demo path after the LED strip was damaged.</p>
@@ -381,7 +382,7 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
     <section class="section section-muted" id="future" aria-labelledby="future-title">
       <div class="container">
         <p class="eyebrow">Future work</p>
-        <h2 id="future-title">What I would build next</h2>
+        <h2 id="future-title">What I would build next</h2><br>
         <div class="future-grid">
           <article><h3>Rebuild LED strip</h3><p>Add stronger strain relief and replace the damaged data-chain section.</p></article>
           <article><h3>Custom board</h3><p>Move the level shifter, resistor, capacitor, and connectors off the breadboard.</p></article>
@@ -400,7 +401,7 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
             <p class="eyebrow">Files / source</p>
             <h2 id="files-title">Submission links</h2>
           </div>
-          <p>These links point to real files in the static project folder. The final demo video slot is the only intentional placeholder.</p>
+          <p>These links point to the source files, live visualizer, project notes, CAD evidence, and final demo video.</p>
         </div>
 
         <div class="download-grid">
@@ -409,7 +410,7 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
           <a class="download-card" href="visualizer.html"><span>Live visualizer</span><code>visualizer.html</code></a>
           <a class="download-card" href="README.md"><span>Run instructions</span><code>README.md</code></a>
           <a class="download-card" href="assets/fusion_tray.png"><span>CAD / tray evidence</span><code>assets/fusion_tray.png</code></a>
-          <a class="download-card missing" href="#demo"><span>Demo video placeholder</span><code>assets/demo.mp4</code></a>
+          <a class="download-card" href="assets/demo.mp4"><span>Final demo video</span><code>assets/demo.mp4</code></a>
         </div>
       </div>
     </section>
@@ -418,7 +419,6 @@ int pc = (OPEN_STRINGS[string_idx] + fret_idx + 1) % 12;</code></pre>
   <footer class="footer">
     <div class="container footer-content">
       <p><strong>FretGlow</strong> | DaisyPod-controlled guitar fretboard visualizer</p>
-      <p>Final project page. Demo video pending.</p>
     </div>
   </footer>
 

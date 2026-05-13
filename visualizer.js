@@ -252,10 +252,12 @@
 
   function setSerialStatus(message, type) {
     elements.connectionStatus.textContent = message;
+    elements.connectionStatus.title = message;
     const chip = elements.connectionStatus.closest(".status-chip");
     if (chip) {
       chip.classList.toggle("connected", type === "connected");
       chip.classList.toggle("error", type === "error");
+      chip.title = message;
     }
   }
 
@@ -307,6 +309,61 @@
   function clearSerialParseError() {
     elements.parseError.textContent = "None";
     setSerialParseStatus("ok", "JSON OK");
+  }
+
+  function showSerialHelp(message) {
+    if (!elements.supportWarning) {
+      return;
+    }
+    elements.supportWarning.textContent = message;
+    elements.supportWarning.hidden = false;
+  }
+
+  function hideSerialHelp() {
+    if (!elements.supportWarning) {
+      return;
+    }
+    elements.supportWarning.hidden = true;
+  }
+
+  function describeSerialOpenError(error) {
+    const name = error && error.name ? error.name : "SerialError";
+    const message = error && error.message ? error.message : String(error);
+    const lowerMessage = message.toLowerCase();
+
+    if (name === "NotFoundError") {
+      return {
+        short: "No port selected",
+        detail: "No DaisyPod port was selected. Click Connect DaisyPod again and choose the usbmodem DaisyPod port.",
+      };
+    }
+
+    if (
+      name === "NetworkError" ||
+      name === "InvalidStateError" ||
+      lowerMessage.includes("busy") ||
+      lowerMessage.includes("failed to open") ||
+      lowerMessage.includes("already open") ||
+      lowerMessage.includes("access denied")
+    ) {
+      return {
+        short: "Port busy",
+        detail:
+          "DaisyPod port is busy or blocked. Close Terminal, screen, Arduino Serial Monitor, or any other serial app using /dev/tty.usbmodem, then click Connect DaisyPod again.",
+      };
+    }
+
+    if (name === "SecurityError") {
+      return {
+        short: "Use localhost",
+        detail: "Web Serial needs Chrome or Edge on localhost/HTTPS. Run python3 -m http.server 8000 and open http://localhost:8000/visualizer.html.",
+      };
+    }
+
+    return {
+      short: "Connection failed",
+      detail: `${name}: ${message}`,
+    };
   }
 
   function setAudioStatus(message, type) {
@@ -717,6 +774,10 @@
     }
 
     try {
+      hideSerialHelp();
+      setSerialStatus("Opening port...", "idle");
+      setSerialParseStatus("waiting", "Waiting");
+      elements.parseError.textContent = "None";
       port = await navigator.serial.requestPort();
       await port.open({ baudRate: 115200 });
       serialTextBuffer = "";
@@ -726,8 +787,18 @@
       setSerialParseStatus("waiting", "Waiting");
       readLoopPromise = readSerialLoop();
     } catch (error) {
-      setSerialStatus("Connection failed", "error");
-      setSerialParseError(error instanceof Error ? error.message : String(error));
+      const serialError = describeSerialOpenError(error);
+      setSerialStatus(serialError.short, "error");
+      setSerialParseStatus("waiting", "Waiting");
+      elements.parseError.textContent = serialError.detail;
+      showSerialHelp(serialError.detail);
+      if (port) {
+        try {
+          await port.close();
+        } catch (_closeError) {
+          // The port may not have opened far enough to close.
+        }
+      }
       port = null;
     }
   }

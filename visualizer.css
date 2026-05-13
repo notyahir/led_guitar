@@ -787,6 +787,24 @@ summary:focus-visible {
     flex-direction: column;
   }
 
+  .section-title,
+  .section-title > div,
+  .section-title > p,
+  .audio-card,
+  .audio-grid,
+  .audio-actions,
+  .audio-status-wrap,
+  .audio-metrics {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .section-title h2 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
   .control-strip,
   .audio-metrics,
   .manual-grid,
@@ -804,6 +822,7 @@ summary:focus-visible {
   .audio-actions,
   .audio-actions .button,
   .audio-actions label {
+    flex-basis: 100%;
     width: 100%;
   }
 
